@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Traveler's Coffee - Оптимизированный интерфейс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Инициализация глобальных колористических констант */
+        :root {
+            --text-primary: #FFFFFF;
+        }
+
+        /* Нормализация метрик блочной модели (Box Model) */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #121212;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh;
+        }
+
+        /* Инкапсуляция мобильного видового экрана */
+        .mobile-viewport {
+            width: 100%; 
+            max-width: 414px; 
+            height: 100vh; 
+            max-height: 896px;
+            position: relative;
+            background-color: #0A1420; 
+            color: var(--text-primary);
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Интеграция статического заднего плана (Осень) */
+        .layer-background {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('осень.jpg') center/cover no-repeat;
+            z-index: 0;
+        }
+
+        /* Интеграция кинематического переднего плана (Руки) */
+        .layer-foreground {
+            position: absolute;
+            bottom: -5%;
+            left: 0; 
+            width: 100%; 
+            height: 60%;
+            background: url('руки.png') bottom center/contain no-repeat;
+            z-index: 1;
+            /* Вызов функции гармонических колебаний */
+            animation: harmonicOscillation 4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        /* Оптическая маска для выравнивания контрастности текста */
+        .gradient-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(10, 34, 57, 0.95) 0%, rgba(10, 34, 57, 0.2) 35%, rgba(0,0,0,0.1) 60%, rgba(0, 0, 0, 0.4) 100%);
+            z-index: 2;
+        }
+
+        /* Контейнер Z-индекса для пространственной композиции UI */
+        .content-layer {
+            position: relative; 
+            z-index: 10; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            padding: 40px 20px 30px;
+        }
+
+        /* --- Модуль корпоративной идентификации --- */
+        .brand-header {
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 25px;
+        }
+
+        .logo-img {
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .brand-text {
+            font-weight: 900; 
+            font-size: 20px; 
+            letter-spacing: 1px; 
+            line-height: 1.1; 
+            text-transform: uppercase; 
+            text-align: left;
+        }
+
+        /* --- Типографический кластер --- */
+        .typography-section { 
+            text-align: center; 
+        }
+
+        .main-heading { 
+            font-size: 32px; 
+            font-weight: 500; 
+            margin-bottom: 12px; 
+            line-height: 1.2; 
+        }
+
+        .sub-heading { 
+            font-size: 15px; 
+            font-weight: 400; 
+            opacity: 0.9; 
+        }
+
+        .dot-separator { 
+            margin: 0 4px; 
+            font-size: 10px; 
+            vertical-align: middle; 
+        }
+
+        /* --- Транспарентный контроллер интерфейса (Смещенный вверх) --- */
+        .interaction-matrix {
+            display: flex; 
+            flex-direction: column; 
+            gap: 14px;
+            width: 100%; 
+            max-width: 280px; 
+            margin: auto auto 35vh auto; 
+            position: relative;
+            z-index: 20; 
+        }
+
+        /* Инкапсуляция эффекта Glassmorphism в изолированные узлы */
+        .download-btn {
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            width: 100%; 
+            padding: 14px 20px;
+            border-radius: 14px; 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 15px;
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.4); 
+            background: rgba(0, 0, 0, 0.2); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-btn:active { 
+            transform: scale(0.96); 
+            background: rgba(255, 255, 255, 0.3); 
+        }
+
+        .icon-svg { 
+            width: 20px;
+            height: 20px; 
+            fill: currentColor; 
+        }
+
+        /* Математическая функция гармонической осцилляции по оси Y */
+        @keyframes harmonicOscillation {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-12px) scale(1.02); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-viewport">
+        
+        <!-- Оптические слои -->
+        <div class="layer-background"></div>
+        <div class="layer-foreground"></div>
+        <div class="gradient-overlay"></div>
+        
+        <!-- Каркас пользовательского интерфейса (DOM) -->
+        <div class="content-layer">
+            
+            <header class="brand-header">
+                <img src="logo.jpg" alt="Traveler's Coffee" class="logo-img">
+                <div class="brand-text">TRAVELER'S<br>COFFEE</div>
+            </header>
+            
+            <section class="typography-section">
+                <h1 class="main-heading">Больше чем кофейня</h1>
+                <p class="sub-heading">Путешествовать <span class="dot-separator">&#9679;</span> Любить <span class="dot-separator">&#9679;</span> Пить кофе</p>
+            </section>
+            
+            <!-- Интерактивные узлы -->
+            <div class="interaction-matrix">
+                <!-- Обновленная ссылка для iOS -->
+                <a href="https://apps.apple.com/us/app/travelers-coffee-tashkent/id6754661342" class="download-btn" target="_blank" rel="noopener noreferrer">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                    </svg>
+                    App Store
+                </a>
+                <!-- Обновленная ссылка для Android -->
+                <a href="https://play.google.com/store/apps/details?id=com.travelerscoffee.tashkent&pcampaignid=web_share" class="download-btn" target="_blank" rel="noopener noreferrer">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 141.2L156.9 251.1 46.1 361.9C36.8 350.2 32 334.6 32 316.5v-121c0-18.1 4.8-33.7 15-45.4v-.1L47 141.2zM463.6 312.4l-102.2-58.8 60-60 102.2 58.8c12.3 7.1 12.3 25.9 0 33l-60-60zm-359-171.2v230c0 18.1 4.8 33.7 15 45.4l110.8-110.8-125.8-164.6z"/>
+                    </svg>
+                    Google Play
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
